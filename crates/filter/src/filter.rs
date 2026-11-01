@@ -160,6 +160,14 @@ pub trait HttpFilter: Send + Sync {
         Vec::new()
     }
 
+    /// Whether this filter publishes policy-eligible logical cluster names.
+    ///
+    /// A publisher does not itself set the request's selected cluster; a later
+    /// AI routing filter consumes the names and makes that decision.
+    fn publishes_policy_candidates(&self) -> bool {
+        false
+    }
+
     /// Emit this filter's end-of-request record from the logging phase.
     ///
     /// The access log normally emits from its own completion hooks, but

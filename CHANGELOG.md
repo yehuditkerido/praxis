@@ -19,6 +19,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Experimental `candidate-constraints` lets the `policy` filter publish the
+  logical HTTP clusters whose `http.labels` satisfy PPE's candidate constraint
+  for a later AI routing filter. It returns 403 for `on_empty: deny` and
+  restores the original candidates for `on_empty: fallback`.
+  ([#1271](https://github.com/praxis-proxy/praxis/issues/1271))
 - An experimental network backend behind the `hyper` feature, off by
   default: the proxy data path, TCP forwarder, admin surface and sub-request
   client on hyper 1.x. See `docs/architecture/hyper-backend.md`.

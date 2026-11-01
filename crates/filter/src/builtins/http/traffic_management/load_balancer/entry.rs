@@ -3,6 +3,8 @@
 
 //! Resolved cluster entry: strategy, connection options, and TLS config.
 
+#[cfg(feature = "candidate-constraints")]
+use std::collections::BTreeMap;
 use std::sync::Arc;
 
 use arc_swap::ArcSwap;
@@ -58,6 +60,13 @@ pub(super) struct ClusterEntry {
 
     /// Opaque application provider tagged on the cluster, if any.
     pub(super) application_provider: Option<Arc<str>>,
+
+    /// Operator-defined labels of this logical cluster.
+    ///
+    /// Retained with the resolved entry so policy-candidate filtering can
+    /// evaluate this logical cluster before endpoint load balancing.
+    #[cfg(feature = "candidate-constraints")]
+    pub(super) labels: BTreeMap<String, String>,
 
     /// Normalized upstream base path tagged on the cluster, if any.
     pub(super) base_path: Option<Arc<str>>,
@@ -228,6 +237,8 @@ pub(super) fn build_cluster_entry(cluster: &Cluster) -> Result<ClusterEntry, Fil
         tls,
         application_protocol: cluster.http.application_protocol.clone(),
         application_provider: cluster.http.application_provider.clone(),
+        #[cfg(feature = "candidate-constraints")]
+        labels: cluster.http.labels.clone(),
         base_path: cluster.http.normalized_base_path().map(Arc::from),
         retry_policy,
         retry_state,

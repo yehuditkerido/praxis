@@ -76,9 +76,11 @@ fn environmental(error: &str) -> bool {
         .iter()
         .any(|(filter, enabled)| !enabled && error.contains(&format!("unknown filter type: '{filter}'")));
     let binding = !cfg!(feature = "upstream-binding") && error.contains("needs the upstream-binding build feature");
+    let candidate_constraints = !cfg!(feature = "candidate-constraints")
+        && (error.contains("unknown variant `policy_candidates`") || error.contains("unknown field `labels`"));
     let unset_credential =
         error.contains("credential_injection: environment variable '") && error.contains("' not set");
-    gated || binding || unset_credential || error.contains("No such file or directory")
+    gated || binding || candidate_constraints || unset_credential || error.contains("No such file or directory")
 }
 
 /// Load `path` and resolve its pipelines the way server startup does.

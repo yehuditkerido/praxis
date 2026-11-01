@@ -77,6 +77,14 @@ impl AnyFilter {
         }
     }
 
+    /// Whether this filter publishes policy-eligible logical cluster names.
+    pub fn publishes_policy_candidates(&self) -> bool {
+        match self {
+            Self::Http(f) => f.publishes_policy_candidates(),
+            Self::Tcp(_) => false,
+        }
+    }
+
     /// Emit this filter's end-of-request record from the logging phase.
     ///
     /// Returns whether a record was emitted. TCP filters have no HTTP

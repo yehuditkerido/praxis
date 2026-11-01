@@ -156,7 +156,7 @@ check: ## cargo check of the default and lean feature sets
 # build.
 check-features: ## check each optional feature on its own
 	@for f in policy-engine config-reload admin-api otel basic-auth-filter \
-	          cloud-events-filter upstream-binding iterative-request-router \
+	          cloud-events-filter upstream-binding candidate-constraints iterative-request-router \
 	          router-json-aliases slow-start bound-upstream-request-body chain-binding spiffe \
 	          access-log-syslog hedged-requests tls-health-check; do \
 		echo "== cargo check -p praxis-proxy --no-default-features --features pingora,$$f --all-targets =="; \
